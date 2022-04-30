@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foodmoji/logic/product-cubit/product_cubit.dart';
 import 'package:foodmoji/model/product.dart';
+import 'package:foodmoji/service/notification.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    NotificationWidget.init();
     BlocProvider.of<ProductCubit>(context).getProducts();
     BlocProvider.of<ProductCubit>(context).runEverySec();
 
@@ -55,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 child: Center(
                   child: TextField(
                     onChanged: (value) {
-                      searchProducts(value);
+                      searchProducts(value.trim());
                     },
                     decoration: InputDecoration(
                         hintText: 'Search for something',

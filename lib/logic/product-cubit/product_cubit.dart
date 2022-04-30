@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:foodmoji/model/product.dart';
+import 'package:foodmoji/service/notification.dart';
 import 'package:meta/meta.dart';
 
 import '../../constants.dart';
@@ -42,15 +43,12 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   void runEverySec(){
-    int _start = 60;
-    const oneSec = const Duration(seconds: 2);
+    // int _start = 60;
+    const oneSec = const Duration(seconds: 5);
     timer =  Timer.periodic(
       oneSec,
       (Timer timer){
-          if (_start < 1) {
-            timer.cancel();
-            print("Timer finished");
-          } else {
+
             int randomIndex = random.nextInt(productList.length);
             int qty = int.parse(productList[randomIndex].quantity);
             print(productList[randomIndex].name);
@@ -59,10 +57,11 @@ class ProductCubit extends Cubit<ProductState> {
             productList[randomIndex].quantity = qty.toString();
             if (searchEnabled) emit(ProductsLoaded(productList: searchProductList));
             else emit(ProductsLoaded(productList: productList));
-            _start = _start - 1;
-            print(_start);
 
-          }
+           String sQty = qty.toString();
+           String name = productList[randomIndex].name.toUpperCase();
+           String body = qty>=1? "Only $sQty $name Available" : "$name is sold out";
+           NotificationWidget.showNotification(title: "Product alert", body: body);
       }
     );
   }

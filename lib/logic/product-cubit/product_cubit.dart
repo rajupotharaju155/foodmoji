@@ -44,7 +44,7 @@ class ProductCubit extends Cubit<ProductState> {
 
   void runEverySec(){
     // int _start = 60;
-    const oneSec = const Duration(seconds: 5);
+    const oneSec = const Duration(seconds: 30);
     timer =  Timer.periodic(
       oneSec,
       (Timer timer){
